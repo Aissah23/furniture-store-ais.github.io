@@ -349,7 +349,7 @@
                 
                 <div class="form-options">
                     <label class="remember-me">
-                        <input type="checkbox" id="remember">
+                        <input type="checkbox" id="remember" checked>
                         <span>Ingat saya</span>
                     </label>
                     <a href="forgot-password.html" class="forgot-password">Lupa password?</a>
@@ -448,21 +448,28 @@
             }, 3000);
         }
         
-        // Handle login form submission
+
+    // Handle login form submission
     document.getElementById('login-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        if (!validateForm()) return;
-        
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const rememberMe = document.getElementById('remember').checked;
-        
-        // Show loading state
-        const btnText = document.getElementById('btn-text');
-        const btnLoader = document.getElementById('btn-loader');
-        btnText.style.display = 'none';
-        btnLoader.style.display = 'block';
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('remember').checked;
+    
+    // Save remember me preference
+    localStorage.setItem('rememberMe', rememberMe);
+    
+    // Show loading state
+    const btnText = document.getElementById('btn-text');
+    const btnLoader = document.getElementById('btn-loader');
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'block';
+    
+    // Rest of the code remains the same...
+
         
         // Simulate API call
         try {
@@ -513,8 +520,12 @@
             
             // Auto focus username field
             document.getElementById('username').focus();
+            
+            // Set remember me checkbox based on previous choice
+            if (localStorage.getItem('rememberMe') === 'true') {
+                document.getElementById('remember').checked = true;
+            }
         });
-        
         // Social login handlers
         document.querySelector('.social-btn.google').addEventListener('click', function() {
             showNotification('Fitur login dengan Google akan datang', 'error');
