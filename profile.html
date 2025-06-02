@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Furniture Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" type="png" href="images/fs.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Profile Page Specific Styles */
+        .profile-section {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .profile-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-picture-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        #profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e67e22;
+            margin-bottom: 15px;
+        }
+        
+        .profile-picture-container button {
+            background: #e67e22;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .profile-picture-container button:hover {
+            background: #d35400;
+        }
+        
+        .profile-info p {
+            font-size: 1.1rem;
+            margin: 8px 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .profile-info p strong {
+            display: inline-block;
+            width: 100px;
+            color: #555;
+        }
+        
+        .pesanan-saya {
+            margin-top: 30px;
+        }
+        
+        .pesanan-saya h3 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .order-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            transition: all 0.3s;
+        }
+        
+        .order-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .order-id {
+            font-weight: bold;
+            color: #e67e22;
+        }
+        
+        .order-date {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .order-status {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .status-completed {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .order-items {
+            margin-top: 10px;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-total {
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: right;
+        }
+        
+        .no-orders {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+        
+        .no-orders i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-info p {
+                font-size: 1rem;
+            }
+            
+            .profile-info p strong {
+                width: 80px;
+            }
+            
+            .order-header {
+                flex-direction: column;
+            }
+            
+            .order-date {
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Furniture Store</div>
+        <ul class="nav-links">
+            <li><a href="index.html"><img src="images/home.png" alt="home" style="max-width: 90%;"></a></li>
+            <li><a href="keranjang.html"><img src="images/keranjang.png" alt="keranjang"></a></li>
+            <li><a href="profile.html"><img src="images/profile.png" alt="profile" style="max-width: 30%;"></a></li>
+        </ul>
+    </nav>
+
+    <!-- Profile Section -->
+    <section class="profile-section">
+        <br>
+        <br>
+        <h2>Profile</h2>
+        <div class="profile-info">
+            <div class="profile-picture-container">
+                <img id="profile-picture" src="images/default-profile.png" alt="Profile Picture">
+                <input type="file" id="upload-profile" accept="image/*" style="display: none;">
+                <button onclick="document.getElementById('upload-profile').click()">Ubah Foto Profil</button>
+            </div>
+            <p><strong>Username:</strong> <span id="profile-username"></span></p>
+            <p><strong>Email:</strong> <span id="profile-email"></span></p>
+        </div>
+        <div class="pesanan-saya">
+            <h3>Pesanan Saya</h3>
+            <div id="pesanan-list">
+                <!-- Daftar pesanan akan muncul di sini -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser')) || 
+                           JSON.parse(sessionStorage.getItem('loggedInUser'));
+        
+        if (!loggedInUser) {
+            alert('Silakan login terlebih dahulu');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        // Load profile data - perbaiki bagian ini
+        document.getElementById('profile-username').textContent = loggedInUser.nama || loggedInUser.username || 'Belum diatur';
+        document.getElementById('profile-email').textContent = loggedInUser.email || 'Belum diatur';
+            // Load profile picture if available
+            if (loggedInUser.profilePicture) {
+                document.getElementById('profile-picture').src = loggedInUser.profilePicture;
+            }
+            
+            // Handle profile picture upload
+            document.getElementById('upload-profile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imgUrl = event.target.result;
+                        document.getElementById('profile-picture').src = imgUrl;
+                        
+                        // Save to localStorage
+                        loggedInUser.profilePicture = imgUrl;
+                        localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+                        
+                        showNotification('Foto profil berhasil diubah');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Load orders
+            loadOrders();
+        });
+        
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            const pesananList = document.getElementById('pesanan-list');
+            
+            // Filter orders for current user
+            const userOrders = orders.filter(order => order.user && order.user.email === loggedInUser.email);
+            
+            if (userOrders.length === 0) {
+                pesananList.innerHTML = `
+                    <div class="no-orders">
+                        <i class="fas fa-box-open"></i>
+                        <p>Belum ada pesanan</p>
+                        <a href="index.html" class="btn" style="display: inline-block; margin-top: 15px;">Mulai Berbelanja</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort orders by date (newest first)
+            userOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            pesananList.innerHTML = '';
+            
+            userOrders.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
+                
+                // Calculate total items
+                const totalItems = order.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <div>
+                            <span class="order-id">#${order.id.substring(0, 8)}</span>
+                            <span class="order-date">${new Date(order.date).toLocaleDateString('id-ID')}</span>
+                        </div>
+                        <span class="order-status ${order.status === 'completed' ? 'status-completed' : 'status-pending'}">
+                            ${order.status === 'completed' ? 'Selesai' : 'Menunggu Pembayaran'}
+                        </span>
+                    </div>
+                    <div class="order-items">
+                        ${order.items.slice(0, 2).map(item => `
+                            <div class="order-item">
+                                <span>${item.nama} (${item.quantity || 1}x)</span>
+                                <span>Rp ${(item.harga * (item.quantity || 1)).toLocaleString('id-ID')}</span>
+                            </div>
+                        `).join('')}
+                        ${order.items.length > 2 ? `<div class="order-item">+ ${order.items.length - 2} produk lainnya</div>` : ''}
+                    </div>
+                    <div class="order-total">
+                        Total: Rp ${order.total.toLocaleString('id-ID')}
+                    </div>
+                `;
+                
+                pesananList.appendChild(orderCard);
+            });
+        }
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

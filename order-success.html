@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Berhasil - Furniture Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="shortcut icon" type="image/png" href="images/fs.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Additional CSS for success page */
+    .order-success-section {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .success-icon {
+      color: #2ecc71;
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+    
+    .order-success-section h2 {
+      color: #2ecc71;
+      margin-bottom: 20px;
+    }
+    
+    .order-details {
+      text-align: left;
+      margin: 30px 0;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+    
+    .order-info {
+      margin-bottom: 20px;
+    }
+    
+    .order-info h3 {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .order-items {
+      margin-top: 20px;
+    }
+    
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed #ddd;
+    }
+    
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    
+    .order-total {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+    
+    .action-buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .btn {
+      padding: 12px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background: #e67e22;
+      color: white;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background: #d35400;
+    }
+    
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+    
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+    
+    @media (max-width: 768px) {
+      .order-success-section {
+        padding: 20px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">Furniture Store</div>
+    <ul class="nav-links">
+      <li><a href="index.html"><img src="images/home.png" alt="home" style="max-width: 90%" /></a></li>
+      <li><a href="keranjang.html"><img src="images/keranjang.png" alt="keranjang" /></a></li>
+      <li><a href="profile.html"><img src="images/profile.png" alt="profil" style="max-width: 30%" /></a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+
+  <!-- Order Success Section -->
+  <section class="order-success-section">
+    <div class="success-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <h2>Pesanan Berhasil Diproses!</h2>
+    <p>Terima kasih telah berbelanja di Furniture Store. Pesanan Anda telah kami terima dan sedang diproses.</p>
+    
+    <div class="order-details">
+      <div class="order-info">
+        <h3>Informasi Pesanan</h3>
+        <p><strong>ID Pesanan:</strong> <span id="order-id">-</span></p>
+        <p><strong>Tanggal Pesanan:</strong> <span id="order-date">-</span></p>
+        <p><strong>Status Pesanan:</strong> <span id="order-status">-</span></p>
+      </div>
+      
+      <div class="order-info">
+        <h3>Informasi Pengiriman</h3>
+        <p><strong>Nama:</strong> <span id="customer-name">-</span></p>
+        <p><strong>Alamat:</strong> <span id="shipping-address">-</span></p>
+        <p><strong>Kota:</strong> <span id="shipping-city">-</span></p>
+        <p><strong>Kode Pos:</strong> <span id="shipping-postal">-</span></p>
+      </div>
+      
+      <div class="order-info">
+        <h3>Informasi Pembayaran</h3>
+        <p><strong>Metode Pembayaran:</strong> <span id="payment-method">-</span></p>
+        <div id="payment-details"></div>
+      </div>
+      
+      <div class="order-items">
+        <h3>Produk yang Dipesan</h3>
+        <div id="ordered-products">
+          <!-- Ordered products will be loaded here -->
+        </div>
+        <div class="order-total">
+          <span>Total Pembayaran:</span>
+          <span id="order-total-amount">Rp 0</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <a href="index.html" class="btn btn-primary">Kembali Berbelanja</a>
+      <a href="profile.html#orders" class="btn btn-secondary">Lihat Pesanan Saya</a>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get order ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('id');
+      
+      if (!orderId) {
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      // Find the order in localStorage
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const order = orders.find(o => o.id === orderId);
+      
+      if (!order) {
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      // Display order information
+      document.getElementById('order-id').textContent = order.id;
+      document.getElementById('order-date').textContent = new Date(order.date).toLocaleDateString('id-ID');
+      document.getElementById('order-status').textContent = order.status === 'pending' ? 'Menunggu Pembayaran' : 'Diproses';
+      
+      // Display customer information
+      document.getElementById('customer-name').textContent = order.user.nama || '-';
+      document.getElementById('shipping-address').textContent = order.shippingAddress.alamat || '-';
+      document.getElementById('shipping-city').textContent = order.shippingAddress.kota || '-';
+      document.getElementById('shipping-postal').textContent = order.shippingAddress.kodePos || '-';
+      
+      // Display payment information
+      document.getElementById('payment-method').textContent = getPaymentMethodName(order.payment.method);
+      
+      const paymentDetails = document.getElementById('payment-details');
+      if (order.payment.method === 'transfer' && order.payment.bank) {
+        paymentDetails.innerHTML = `<p><strong>Bank Tujuan:</strong> ${getBankName(order.payment.bank)}</p>`;
+      } else if (order.payment.method === 'e-wallet' && order.payment.eWallet) {
+        paymentDetails.innerHTML = `<p><strong>E-Wallet:</strong> ${getEWalletName(order.payment.eWallet)}</p>`;
+      }
+      
+      // Display ordered products
+      const productsContainer = document.getElementById('ordered-products');
+      let subtotal = 0;
+      
+      order.items.forEach(item => {
+        const price = typeof item.harga === 'number' ? item.harga : Number(item.harga) || 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : Number(item.quantity) || 1;
+        const itemTotal = price * quantity;
+        subtotal += itemTotal;
+        
+        const productElement = document.createElement('div');
+        productElement.className = 'order-item';
+        productElement.innerHTML = `
+          <div>
+            <strong>${item.nama}</strong>
+            ${item.color ? `<div>Warna: ${item.color}</div>` : ''}
+            ${item.material ? `<div>Material: ${item.material}</div>` : ''}
+          </div>
+          <div>
+            <div>${quantity} x Rp ${price.toLocaleString('id-ID')}</div>
+            <strong>Rp ${itemTotal.toLocaleString('id-ID')}</strong>
+          </div>
+        `;
+        productsContainer.appendChild(productElement);
+      });
+      
+      // Add shipping cost
+      const shipping = 50000;
+      const total = subtotal + shipping;
+      
+      const shippingElement = document.createElement('div');
+      shippingElement.className = 'order-item';
+      shippingElement.innerHTML = `
+        <div>Biaya Pengiriman</div>
+        <div>Rp ${shipping.toLocaleString('id-ID')}</div>
+      `;
+      productsContainer.appendChild(shippingElement);
+      
+      // Display total
+      document.getElementById('order-total-amount').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+    });
+    
+    // Helper functions for payment method names
+    function getPaymentMethodName(method) {
+      switch(method) {
+        case 'cod': return 'COD (Bayar di Tempat)';
+        case 'transfer': return 'Transfer Bank';
+        case 'e-wallet': return 'E-Wallet';
+        default: return method;
+      }
+    }
+    
+    function getBankName(bank) {
+      switch(bank) {
+        case 'bca': return 'BCA';
+        case 'bni': return 'BNI';
+        case 'mandiri': return 'Mandiri';
+        case 'bri': return 'BRI';
+        default: return bank;
+      }
+    }
+    
+    function getEWalletName(wallet) {
+      switch(wallet) {
+        case 'gopay': return 'GoPay';
+        case 'ovo': return 'OVO';
+        case 'dana': return 'DANA';
+        case 'shopeepay': return 'ShopeePay';
+        default: return wallet;
+      }
+    }
+  </script>
+</body>
+</html>

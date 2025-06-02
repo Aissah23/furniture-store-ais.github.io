@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meja Kayu - Furniture Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut  icon" type="png" href="images/fs.png">
+    <style>
+        .product-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: #f8f8f8;
+        }
+        .product-container {
+            display: flex;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .product-image {
+            flex: 1;
+            text-align: center;
+        }
+        .product-image img {
+            max-width: 60%;
+            border-radius: 10px;
+        }
+        .thumbnail-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .thumbnail {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .product-details {
+            flex: 1;
+            padding: 20px;
+        }
+        .price {
+            font-size: 24px;
+            color: #e67e22;
+            font-weight: bold;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .cart-btn, .order-btn {
+            padding: 10px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .cart-btn {
+            background: #686868;
+            color: white;
+        }
+        .order-btn {
+            background: #686868;
+            color: white;
+        }
+        .cart-btn:hover, .order-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Furniture Store</div>
+        <ul class="nav-links">
+            <li><a href="index.html"><img src="images/home.png" alt="home"></a></li>
+            <li><a href="keranjang.html"><img src="images/keranjang.png" alt=""></a></li>
+            <li><a href="profile.html"><img src="images/profile.png" alt="profile" style="max-width: 30%;"></a></li>
+            <li id="login-link"><a href="login.html">Login</a></li>       
+        </ul>
+        <div class="burger-menu" onclick="toggleNav()">
+            ☰
+        </div>
+    </nav>
+
+    <!-- Produk Section -->
+    <section class="product-section">
+        <div class="product-container">
+            <div class="product-image">
+                <img id="product-img" src="images/meja.jpeg" alt="Produk 1">
+                <div class="thumbnail-container">
+                    <img class="thumbnail" src="images/meja.jpeg" onclick="changeImage('images/meja.jpeg')">
+                    <img class="thumbnail" src="images/m2.jpeg" onclick="changeImage('images/m2.jpeg')">
+                    <img class="thumbnail" src="images/m3.jpeg" onclick="changeImage('images/m3.jpeg')">
+                </div>
+            </div>
+            <div class="product-details">
+                <h2>Meja Kayu</h2>
+                <p class="price">Rp 2.000.000</p>
+                <p class="description">Meja Kayu dengan desain minimalis, nyaman digunakan, dan cocok untuk berbagai interior rumah.</p>
+                <label for="color">Varian Warna:</label>
+                <select id="color">
+                    <option>klasik</option>
+                    <option>Hitam</option>
+                    <option>Coklat</option>
+                </select>
+                <div class="buttons">
+                    <button class="cart-btn">Tambah keranjang</button>
+                    <button class="order-btn">Pesan Sekarang</button>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="Gambar">
+            <a href="https://www.instagram.com"><img src="images/phone.png" alt=""></a>
+            <a href="https://www.facebook.com"><img src="images/mail.png"></a>
+            <a href="https://shopee.co.id/buyer/login?next=https%3A%2F%2Fshopee.co.id%2Fhatisuhitaofficial"><img src="images/tt.png" alt=""></a>
+        </div>
+        <p>&copy; Dilindungi Oleh Hak Cipta 2023. Furniture Store</p>
+    </footer>
+
+    <script src="script.js">
+        function changeImage(imageSrc) {
+            document.getElementById("product-img").src = imageSrc;
+        }
+    </script>
+</body>
+</html>

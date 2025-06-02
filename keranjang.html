@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang Belanja - Furniture Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" type="png" href="images/fs.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Tambahan CSS khusus untuk halaman keranjang */
+        .keranjang-section {
+            padding: 30px 0;
+            min-height: 60vh;
+        }
+        
+        .empty-cart {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        
+        .empty-cart i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .empty-cart p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .cart-content {
+            display: none;
+        }
+        
+        .cart-items {
+            flex: 2;
+        }
+        
+        .cart-summary {
+            flex: 1;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-left: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .cart-item {
+            display: flex;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .item-image {
+            width: 120px;
+            height: 120px;
+            margin-right: 20px;
+        }
+        
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-details h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+        
+        .item-details .price {
+            color: #e67e22;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-controls button {
+            width: 30px;
+            height: 30px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-controls span {
+            margin: 0 10px;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+        
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .item-total {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .summary-details {
+            margin: 20px 0;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .summary-row.total {
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-bottom: none;
+            padding-top: 10px;
+            margin-top: 10px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checkout-btn:hover {
+            background: #d35400;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-content {
+                flex-direction: column;
+            }
+            
+            .cart-summary {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+            }
+            
+            .item-image {
+                width: 100%;
+                height: 200px;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .item-actions {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 15px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Furniture Store</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#kategori">Kategori</a></li>
+            <li><a href="index.html#produk">Produk</a></li>
+            <li>
+                <a href="keranjang.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+            </li>
+            <li><a href="profile.html"><i class="fas fa-user"></i></a></li>
+            <li id="login-link"><a href="login.html">Login</a></li>
+        </ul>
+        <div class="burger-menu" onclick="toggleNav()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Keranjang Section -->
+    <section class="keranjang-section">
+        <div class="container">
+            <br>
+            <br>
+            <h2>Keranjang Belanja</h2>
+            
+            <div id="empty-cart-message" class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Keranjang belanja Anda kosong</p>
+                <a href="index.html#produk" class="cta-button">Mulai Belanja</a>
+            </div>
+            
+            <div id="cart-content">
+                <div class="cart-items" id="cart-items-container">
+                    <!-- Item keranjang akan dimuat di sini -->
+                </div>
+                
+                <div class="cart-summary">
+                    <h3>Ringkasan Belanja</h3>
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal">Rp 0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Pengiriman</span>
+                            <span id="shipping">Rp 0</span>
+                        </div>
+                        <div class="summary-row discount">
+                            <span>Diskon</span>
+                            <span id="discount">- Rp 0</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span id="total">Rp 0</span>
+                        </div>
+                    </div>
+                    <button id="checkout-btn" class="checkout-btn">Proses Checkout</button>
+                    <div class="coupon-section" style="margin-top: 15px;">
+                        <input type="text" id="coupon-code" placeholder="Kode Kupon">
+                        <button id="apply-coupon" class="apply-coupon">Terapkan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3>Tentang Kami</h3>
+                <p>Furniture Store menyediakan furnitur berkualitas tinggi dengan desain modern dan harga terjangkau.</p>
+                <div class="contact">
+                    <span><i class="fas fa-phone"></i> 0812-3456-7890</span>
+                    <span><i class="fas fa-envelope"></i> info@furniturestore.com</span>
+                </div>
+            </div>
+            <div class="footer-section links">
+                <h3>Link Cepat</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#kategori">Kategori</a></li>
+                    <li><a href="index.html#produk">Produk</a></li>
+                    <li><a href="keranjang.html">Keranjang</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+            </div>
+            <div class="footer-section social">
+                <h3>Ikuti Kami</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Furniture Store. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Fungsi untuk memuat keranjang
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsContainer = document.getElementById('cart-items-container');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const cartContent = document.getElementById('cart-content');
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'flex';
+                cartContent.style.display = 'none';
+                updateCartCount();
+                return;
+            }
+            
+            emptyCartMessage.style.display = 'none';
+            cartContent.style.display = 'flex';
+            cartItemsContainer.innerHTML = '';
+            
+            let subtotal = 0;
+            let discount = 0;
+            
+            cart.forEach((item, index) => {
+                // Pastikan item memiliki properti yang diperlukan
+                if (!item.harga || !item.quantity) {
+                    console.error('Item keranjang tidak valid:', item);
+                    return;
+                }
+                
+                const itemTotal = item.harga * item.quantity;
+                subtotal += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="item-image">
+                        <img src="${item.gambar || 'images/default-product.jpg'}" alt="${item.nama}">
+                    </div>
+                    <div class="item-details">
+                        <h3>${item.nama}</h3>
+                        <p class="price">Rp ${item.harga.toLocaleString('id-ID')}</p>
+                        ${item.color ? `<p>Warna: ${item.color}</p>` : ''}
+                        ${item.material ? `<p>Material: ${item.material}</p>` : ''}
+                        <div class="quantity-controls">
+                            <button onclick="updateQuantity(${index}, -1)"><i class="fas fa-minus"></i></button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity(${index}, 1)"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="remove-btn" onclick="removeItem(${index})">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                        <p class="item-total">Rp ${itemTotal.toLocaleString('id-ID')}</p>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+            
+            // Hitung diskon (contoh: jika subtotal > 1 juta dapat diskon 10%)
+            if (subtotal > 1000000) {
+                discount = subtotal * 0.1;
+            }
+            
+            // Biaya pengiriman
+            const shipping = subtotal > 0 ? 50000 : 0;
+            const total = subtotal + shipping - discount;
+            
+            // Update ringkasan belanja
+            document.getElementById('subtotal').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+            document.getElementById('shipping').textContent = `Rp ${shipping.toLocaleString('id-ID')}`;
+            document.getElementById('discount').textContent = `- Rp ${discount.toLocaleString('id-ID')}`;
+            document.getElementById('total').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+            
+            // Update cart count di navbar
+            updateCartCount();
+        }
+        
+        // Fungsi untuk update quantity
+        function updateQuantity(index, change) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            // Pastikan item ada
+            if (!cart[index]) {
+                console.error('Item tidak ditemukan di index:', index);
+                return;
+            }
+            
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+            
+            // Tampilkan notifikasi
+            const notificationMsg = change > 0 ? 'Jumlah produk ditambah' : 'Jumlah produk dikurangi';
+            showNotification(notificationMsg);
+        }
+        
+        // Fungsi untuk menghapus item
+        function removeItem(index) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            // Simpan nama produk untuk notifikasi
+            const productName = cart[index]?.nama || 'Produk';
+            
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+            
+            // Tampilkan notifikasi
+            showNotification(`${productName} telah dihapus dari keranjang`);
+        }
+        
+        // Fungsi untuk checkout
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            if (cart.length === 0) {
+                showNotification('Keranjang belanja kosong');
+                return;
+            }
+            
+            const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+            if (!loggedInUser) {
+                showNotification('Silakan login terlebih dahulu');
+                setTimeout(() => {
+                    window.location.href = 'login.html?redirect=keranjang.html';
+                }, 1500);
+                return;
+            }
+            
+            window.location.href = 'pesan.html';
+        });
+        
+        // Fungsi untuk menerapkan kupon
+        document.getElementById('apply-coupon').addEventListener('click', function() {
+            const couponCode = document.getElementById('coupon-code').value;
+            
+            if (!couponCode) {
+                showNotification('Masukkan kode kupon');
+                return;
+            }
+            
+            // Di sini Anda bisa menambahkan logika validasi kupon
+            showNotification('Kupon diterapkan');
+            // loadCart(); // Uncomment jika perlu reload data
+        });
+        
+        // Jalankan saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCart();
+            checkLoginStatus();
+            
+            // Periksa jika ada parameter success dari halaman lain
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success')) {
+                showNotification('Produk berhasil ditambahkan ke keranjang');
+            }
+        });
+    </script>
+</body>
+</html>

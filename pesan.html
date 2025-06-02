@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pesan - Furniture Store</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="shortcut icon" type="image/png" href="images/fs.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Additional CSS for pesan page */
+    .pesan-section {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .pesan-section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    #pesanForm {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #555;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    
+    .form-group textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+    
+    button[type="submit"] {
+      grid-column: span 2;
+      background: #e67e22;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    button[type="submit"]:hover {
+      background: #d35400;
+    }
+    
+    .order-summary {
+      grid-column: span 2;
+      border: 1px solid #eee;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    
+    .order-summary h3 {
+      margin-top: 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    
+    .order-total {
+      font-weight: bold;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    
+    @media (max-width: 768px) {
+      #pesanForm {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-group.full-width,
+      button[type="submit"] {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">Furniture Store</div>
+    <ul class="nav-links">
+      <li><a href="index.html"><img src="images/home.png" alt="home" style="max-width: 90%" /></a></li>
+      <li><a href="keranjang.html"><img src="images/keranjang.png" alt="keranjang" /></a></li>
+      <li><a href="profile.html"><img src="images/profile.png" alt="profil" style="max-width: 30%" /></a></li>
+    </ul>
+  </nav>
+
+  <!-- Pesan Section -->
+  <section class="pesan-section">
+    <br>
+    <br>
+    <h2>Checkout</h2>
+    <form id="pesanForm">
+      <div class="form-group">
+        <label for="nama">Nama Lengkap:</label>
+        <input type="text" id="nama" name="nama" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="telepon">Nomor Telepon:</label>
+        <input type="tel" id="telepon" name="telepon" required />
+      </div>
+      
+      <div class="form-group full-width">
+        <label for="alamat">Alamat Lengkap:</label>
+        <textarea id="alamat" name="alamat" required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="kota">Kota:</label>
+        <input type="text" id="kota" name="kota" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="kode-pos">Kode Pos:</label>
+        <input type="text" id="kode-pos" name="kode-pos" required />
+      </div>
+      
+      <div class="form-group full-width order-summary">
+        <h3>Ringkasan Pesanan</h3>
+        <div id="order-items">
+          <!-- Order items will be loaded here -->
+        </div>
+        <div class="order-total">
+          <span>Total:</span>
+          <span id="order-total">Rp 0</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="metode-pembayaran">Metode Pembayaran:</label>
+        <select id="metode-pembayaran" name="metode-pembayaran" required>
+          <option value="">Pilih metode pembayaran</option>
+          <option value="cod">COD (Bayar di Tempat)</option>
+          <option value="transfer">Transfer Bank</option>
+          <option value="e-wallet">E-Wallet</option>
+        </select>
+      </div>
+      
+      <div class="form-group" id="bank-details" style="display: none;">
+        <label for="bank">Bank Tujuan:</label>
+        <select id="bank" name="bank">
+          <option value="bca">BCA</option>
+          <option value="bni">BNI</option>
+          <option value="mandiri">Mandiri</option>
+          <option value="bri">BRI</option>
+        </select>
+      </div>
+      
+      <div class="form-group" id="e-wallet-details" style="display: none;">
+        <label for="e-wallet">E-Wallet:</label>
+        <select id="e-wallet" name="e-wallet">
+          <option value="gopay">GoPay</option>
+          <option value="ovo">OVO</option>
+          <option value="dana">DANA</option>
+          <option value="shopeepay">ShopeePay</option>
+        </select>
+      </div>
+      
+      <button type="submit">Konfirmasi Pesanan</button>
+    </form>
+  </section>
+
+  <script>
+    // Load order summary from cart
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+      if (!loggedInUser) {
+        alert('Silakan login terlebih dahulu');
+        window.location.href = 'login.html?redirect=pesan.html';
+        return;
+      }
+      
+      // Pre-fill user data if available
+      if (loggedInUser) {
+        document.getElementById('nama').value = loggedInUser.nama || '';
+        document.getElementById('email').value = loggedInUser.email || '';
+        document.getElementById('telepon').value = loggedInUser.telepon || '';
+      }
+      
+      // Load cart items
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const orderItemsContainer = document.getElementById('order-items');
+      let total = 0;
+      
+      if (cart.length === 0) {
+        orderItemsContainer.innerHTML = '<p>Keranjang belanja kosong</p>';
+        document.getElementById('order-total').textContent = 'Rp 0';
+        return;
+      }
+      
+      orderItemsContainer.innerHTML = '';
+      
+      cart.forEach(item => {
+        // Ensure price and quantity are numbers
+        const price = typeof item.harga === 'number' ? item.harga : Number(item.harga) || 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : Number(item.quantity) || 1;
+        
+        const itemTotal = price * quantity;
+        total += itemTotal;
+        
+        const itemElement = document.createElement('div');
+        itemElement.className = 'order-item';
+        itemElement.innerHTML = `
+          <span>${item.nama} (${quantity}x)</span>
+          <span>Rp ${itemTotal.toLocaleString('id-ID')}</span>
+        `;
+        orderItemsContainer.appendChild(itemElement);
+      });
+      
+      // Add shipping cost
+      const shipping = 50000;
+      total += shipping;
+      
+      const shippingElement = document.createElement('div');
+      shippingElement.className = 'order-item';
+      shippingElement.innerHTML = `
+        <span>Biaya Pengiriman</span>
+        <span>Rp ${shipping.toLocaleString('id-ID')}</span>
+      `;
+      orderItemsContainer.appendChild(shippingElement);
+      
+      // Display total
+      document.getElementById('order-total').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+      
+      // Show/hide payment method details
+      document.getElementById('metode-pembayaran').addEventListener('change', function() {
+        const method = this.value;
+        document.getElementById('bank-details').style.display = method === 'transfer' ? 'block' : 'none';
+        document.getElementById('e-wallet-details').style.display = method === 'e-wallet' ? 'block' : 'none';
+      });
+    });
+    
+    // Handle form submission
+    document.getElementById('pesanForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get form values
+      const formData = {
+        nama: document.getElementById('nama').value,
+        email: document.getElementById('email').value,
+        telepon: document.getElementById('telepon').value,
+        alamat: document.getElementById('alamat').value,
+        kota: document.getElementById('kota').value,
+        kodePos: document.getElementById('kode-pos').value,
+        metodePembayaran: document.getElementById('metode-pembayaran').value,
+        bank: document.getElementById('bank-details').style.display === 'block' ? document.getElementById('bank').value : null,
+        eWallet: document.getElementById('e-wallet-details').style.display === 'block' ? document.getElementById('e-wallet').value : null
+      };
+      
+      // Get cart items
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      // Create order object
+      const order = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        user: JSON.parse(localStorage.getItem('loggedInUser')),
+        items: cart,
+        shippingAddress: {
+          alamat: formData.alamat,
+          kota: formData.kota,
+          kodePos: formData.kodePos
+        },
+        payment: {
+          method: formData.metodePembayaran,
+          bank: formData.bank,
+          eWallet: formData.eWallet
+        },
+        status: 'pending'
+      };
+      
+      // Calculate total
+      let total = 0;
+      cart.forEach(item => {
+        const price = typeof item.harga === 'number' ? item.harga : Number(item.harga) || 0;
+        const quantity = typeof item.quantity === 'number' ? item.quantity : Number(item.quantity) || 1;
+        total += price * quantity;
+      });
+      total += 50000; // Shipping cost
+      order.total = total;
+      
+      // Save order to localStorage
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push(order);
+      localStorage.setItem('orders', JSON.stringify(orders));
+      
+      // Clear cart
+      localStorage.removeItem('cart');
+      
+      // Redirect to thank you page or order confirmation
+      window.location.href = 'order-success.html?id=' + order.id;
+    });
+    
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

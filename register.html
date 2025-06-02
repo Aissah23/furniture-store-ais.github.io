@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - Furniture Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" type="png" href="images/fs.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .password-strength {
+            margin-top: 5px;
+            height: 5px;
+            background-color: #eee;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #e74c3c;
+            transition: width 0.3s;
+        }
+        
+        .password-requirements {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .requirement {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .requirement i {
+            margin-right: 5px;
+            font-size: 0.7rem;
+        }
+        
+        .requirement.valid {
+            color: #27ae60;
+        }
+        
+        .requirement.valid i {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Container -->
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Buat Akun Baru</h2>
+                <p>Isi form berikut untuk mendaftar</p>
+            </div>
+            
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" required minlength="4" maxlength="20">
+                    <small class="input-hint">4-20 karakter, tanpa spasi</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <div class="password-input">
+                        <input type="password" id="reg-password" required minlength="8">
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="password-strength-bar"></div>
+                    </div>
+                    <div class="password-requirements">
+                        <div class="requirement" id="req-length">
+                            <i class="fas fa-circle"></i>
+                            <span>Minimal 8 karakter</span>
+                        </div>
+                        <div class="requirement" id="req-uppercase">
+                            <i class="fas fa-circle"></i>
+                            <span>Minimal 1 huruf besar</span>
+                        </div>
+                        <div class="requirement" id="req-number">
+                            <i class="fas fa-circle"></i>
+                            <span>Minimal 1 angka</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-confirm">Konfirmasi Password</label>
+                    <div class="password-input">
+                        <input type="password" id="reg-confirm" required>
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <small id="confirm-message" class="error-message"></small>
+                </div>
+                
+                <div class="form-group terms">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">Saya setuju dengan <a href="#">Syarat dan Ketentuan</a> serta <a href="#">Kebijakan Privasi</a></label>
+                </div>
+                
+                <button type="submit" class="auth-btn" id="register-btn">Daftar</button>
+                
+                <div class="auth-footer">
+                    <p>Sudah punya akun? <a href="login.html">Masuk disini</a></p>
+                </div>
+            </form>
+            
+            <div class="auth-social">
+                <p>Atau daftar dengan</p>
+                <div class="social-buttons">
+                    <button type="button" class="social-btn google">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                    <button type="button" class="social-btn facebook">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="auth-image">
+            <img src="images/register-bg.jpg" alt="Furniture Showroom">
+            <div class="image-overlay">
+                <h3>Selamat Datang di Furniture Store</h3>
+                <p>Bergabunglah dengan kami untuk pengalaman belanja furnitur terbaik</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        });
+        
+        // Password strength checker
+        document.getElementById('reg-password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.getElementById('password-strength-bar');
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                number: /[0-9]/.test(password)
+            };
+            
+            // Update strength bar
+            let strength = 0;
+            if (requirements.length) strength += 33;
+            if (requirements.uppercase) strength += 33;
+            if (requirements.number) strength += 34;
+            
+            strengthBar.style.width = strength + '%';
+            
+            if (strength < 33) {
+                strengthBar.style.backgroundColor = '#e74c3c';
+            } else if (strength < 66) {
+                strengthBar.style.backgroundColor = '#f39c12';
+            } else {
+                strengthBar.style.backgroundColor = '#27ae60';
+            }
+            
+            // Update requirements
+            document.getElementById('req-length').classList.toggle('valid', requirements.length);
+            document.getElementById('req-uppercase').classList.toggle('valid', requirements.uppercase);
+            document.getElementById('req-number').classList.toggle('valid', requirements.number);
+        });
+        
+        // Confirm password validation
+        document.getElementById('reg-confirm').addEventListener('input', function() {
+            const password = document.getElementById('reg-password').value;
+            const confirmMessage = document.getElementById('confirm-message');
+            
+            if (this.value !== password) {
+                confirmMessage.textContent = 'Password tidak cocok';
+                confirmMessage.style.color = '#e74c3c';
+            } else {
+                confirmMessage.textContent = 'Password cocok';
+                confirmMessage.style.color = '#27ae60';
+            }
+        });
+        
+        // Handle registration form submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm').value;
+            
+            // Validate form
+            if (password !== confirmPassword) {
+                showNotification('Konfirmasi password tidak cocok');
+                return;
+            }
+            
+            if (!document.getElementById('terms').checked) {
+                showNotification('Anda harus menyetujui syarat dan ketentuan');
+                return;
+            }
+            
+            // Check if user already exists (simulated)
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userExists = users.some(user => user.username === username || user.email === email);
+            
+            if (userExists) {
+                showNotification('Username atau email sudah terdaftar');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                username: username,
+                email: email,
+                password: password, // Note: In real app, password should be hashed
+                joinDate: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Auto login after registration
+            const loggedInUser = {
+                username: username,
+                email: email,
+                joinDate: new Date().toISOString()
+            };
+            
+            localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+            
+            showNotification('Pendaftaran berhasil!');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
